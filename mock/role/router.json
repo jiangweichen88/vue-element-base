@@ -1,0 +1,13 @@
+ [
+  {
+    path: '/icon/index',
+    name: 'Icons',
+    url:'views/icons/index',
+    meta: {
+      title: 'icons',
+	  icon: 'icon',
+      roles: ['admin', 'editor']
+    }
+  },
+  { path: '*', redirect: '/404', hidden: true }
+]

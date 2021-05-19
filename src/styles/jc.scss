@@ -1,0 +1,221 @@
+.dis-f {
+    display: flex;
+}
+.dis-b {
+    display: block;
+}
+.flex1 {
+    flex: 1;
+}
+.flex-d-c{
+   flex-direction: column; 
+}
+.pointer {
+    cursor: pointer;
+}
+.bg-w {
+    background: #fff;
+}
+.bg-c {
+    background: #eef1f6;
+}
+.w100 {
+    width: 100%;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.mar10 {
+    margin: 10px;
+}
+
+.mar0 {
+    margin: 0px;
+}
+
+.martb10 {
+    margin: 10px 0;
+}
+
+.marlr10 {
+    margin: 0 10px;
+}
+
+.martr10 {
+    margin: 10px 10px 0 0;
+}
+
+.marbl10 {
+    margin: 0 0 10px 10px;
+}
+
+.marl10 {
+    margin-left: 10px;
+}
+
+.marr10 {
+    margin-right: 10px;
+}
+.marb10 {
+    margin-bottom: 10px;
+}
+
+.mart10 {
+    margin-top: 10px;
+}
+.marl16 {
+    margin-left: 16px;
+}
+
+.marr16 {
+    margin-right: 16px;
+}
+
+.marb16 {
+    margin-bottom: 16px;
+}
+.mart16 {
+    margin-top: 16px;
+}
+.mart0 {
+    margin-top: 0px;
+}
+.pad10 {
+    padding: 10px;
+}
+.pad16 {
+    padding: 16px;
+}
+.pad0 {
+    padding: 0px;
+}
+
+.padtb10 {
+    padding: 10px 0;
+}
+
+.padlr10 {
+    padding: 0 10px;
+}
+
+.padl10 {
+    padding-left: 10px;
+}
+.padl16 {
+    padding-left: 16px;
+}
+.padr10 {
+    padding-right: 10px;
+}
+.padr16 {
+    padding-right: 16px;
+}
+.padb10 {
+    padding-bottom: 10px;
+}
+.padb16 {
+    padding-bottom: 16px;
+}
+.padb0 {
+    padding-bottom: 0px;
+}
+
+.padt10 {
+    padding-top: 10px;
+}
+.padt16 {
+    padding-top: 16px;
+}
+.padt0 {
+    padding-top: 0px;
+}
+
+.txt-ovf ,.ellipsis{
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.center {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.ovf-h {
+    overflow: hidden;
+}
+
+.ovf-v {
+    overflow: visible;
+}
+
+.ovf-a {
+    overflow: auto;
+}
+
+.ovf-v {
+    overflow: visible;
+}
+
+.ovf-x-a {
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.ovf-y-a {
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.fit {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+.h100 {
+    height: 100%;
+}
+
+.bor4 {
+    border: 1px solid #EBEEF5;
+}
+
+.bor-b {
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.pos-a {
+    position: absolute;
+}
+
+.pos-r {
+    position: relative;
+}
+
+.txr {
+    text-align: right;
+}
+
+.txl {
+    text-align: left;
+}
+
+.txc {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+ul,li{ padding:0;margin:0;list-style:none}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td,strong{padding:0;margin:0;font-family:Arial,'Microsoft Yahei';}
