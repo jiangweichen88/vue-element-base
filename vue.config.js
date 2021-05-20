@@ -17,7 +17,7 @@ const port = process.env.port || process.env.npm_config_port || 9527 // dev port
 
 //所有配置项的说明可以在https://cli.vuejs.org/config/中找到
 module.exports = {
-  publicPath: '/',
+  publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',

@@ -63,6 +63,11 @@ export function keyToValue(obj) { // key和value交换
   }
   return result
 }
+ export function parseDom(arg) {//字符串转dom
+　　 let objE = document.createElement("div");
+　　 objE.innerHTML = arg;
+　　 return objE.childNodes;
+};
 export function omit(object, props = []) { // 对象属性剔除
   const res = {}
   Object.keys(object).forEach(key => {

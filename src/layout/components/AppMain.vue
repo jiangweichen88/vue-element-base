@@ -31,6 +31,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+  overflow-y:auto ;
 }
 
 .fixed-header+.app-main {

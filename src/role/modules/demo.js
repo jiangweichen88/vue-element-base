@@ -9,7 +9,24 @@ const demo = {
     title: 'demo',
     roles: ['admin']
   },
+  children: [
+  {
+  path: '/guide', // 引导页
+      component: () =>
+      import('@/views/demo/index'),
   children: [{
+    path: 'index',
+    component: () =>
+      import('@/views/guide/index'),
+    name: 'Guide',
+    meta: {
+      title: 'guide',
+      icon: 'guide',
+      noCache: true
+    }
+  }]
+},
+  {
     path: '/icon',
     component: () =>
       import('@/views/demo/index'),

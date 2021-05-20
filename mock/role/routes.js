@@ -46,7 +46,8 @@ const asyncRoutes = [
 			name: 'menu',
 			meta: {
 				title: 'menu',
-				roles: ['admin'] 
+				roles: ['admin'],
+				 icon: 'nested'
 			},
 		}]
 	}
