@@ -1,4 +1,22 @@
+export function getViews(path) { // 字符串转import
+  return resolve => {
+    require.ensure([], (require) => {
+      resolve(require('@/' + path + '.vue'))
+    })
+  }
+}
 /* 数组 start---------------*/
+export	function readNodes(nodes, arr = []) { // 过滤得到树形结构selected为true的项
+  for (const item of nodes) {
+    if (!item.selected) continue
+    const obj = { ...item,
+      children: []
+    }
+    arr.push(obj)
+    if (item.children && item.children.length) readNodes(item.children, obj.children)
+  }
+  return arr
+}
 // 布尔全等判断
 export const all = (arr, fn = Boolean) => arr.every(fn)
 // all([4, 2, 3], x => x > 1); // true
@@ -63,11 +81,11 @@ export function keyToValue(obj) { // key和value交换
   }
   return result
 }
- export function parseDom(arg) {//字符串转dom
-　　 let objE = document.createElement("div");
-　　 objE.innerHTML = arg;
-　　 return objE.childNodes;
-};
+export function parseDom(arg) { // 字符串转dom
+  const objE = document.createElement('div')
+  objE.innerHTML = arg
+  return objE.childNodes
+}
 export function omit(object, props = []) { // 对象属性剔除
   const res = {}
   Object.keys(object).forEach(key => {

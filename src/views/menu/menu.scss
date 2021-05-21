@@ -3,5 +3,12 @@
   ::v-deep .el-tree-node__content{
     height: 36px;
 } 
+::v-deep .custom-tree-node{
+    flex: 1;
+    padding-right: 15px;
+    .span{
+        float:right;
+    }
+}
 }
 

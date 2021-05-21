@@ -4,6 +4,7 @@ import demo from '@/role/modules/demo.js'
 import { getRoutesObj } from '@/api/role.js'
 /* Layout */
 import Layout from '@/layout'
+import { getRoutes } from '@/api/role'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -47,23 +48,25 @@ const state = {
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
-    state.routes = constantRoutes.concat(routes)
+    //		state.routes = constantRoutes.concat(routes)
+    state.routes = routes // 左侧导航数据
   }
 }
 export function routesSetUrl(data) {
   const a = data.map(item => {
-    return {
-      ...item,
-      component: Layout,
-      children: item.children && item.children.length ? item.children.map(item2 => {
-        return {
-          ...item2,
-          component: getViews(item2.component)
-        }
-      }) : []
+    if (item.children && item.children.length) {
+      return {
+        ...item,
+        component: getViews(item.component),
+        children: routesSetUrl(item.children)
+      }
+    } else {
+      return {
+        ...item,
+        component: getViews(item.component)
+      }
     }
   })
-  //	console.log(a)
   return a
 }
 export function getViews(path) {
@@ -81,69 +84,45 @@ const actions = {
       const data = res.data
       return data
     })
-    console.log(asyncRoutes, data.asyncRoutes)
     let asyncRoutes0
-    const a = [{
-      path: '/icon',
-      children: [{
-        path: 'index',
-        component: 'views/icons/index',
-        name: 'Icons',
-        meta: {
-          title: 'icons',
-          icon: 'icon',
-          roles: ['admin']
-          //					noCache: true
-        }
-      }]
-    },
-    {
-      path: '/icon2',
-      component: Layout,
-      children: [{
-        path: 'index',
-        component: 'views/icons2/index',
-        name: 'Icons2',
-        meta: {
-          title: 'icons2',
-          icon: 'icon'
-          //					noCache: true
-        }
-      }]
+    const abc = await getRoutes() // 请求路由json
+    asyncRoutes0 = routesSetUrl(abc.data.filter(item => item.selected))
+    const rolesIsArr = Array.isArray(roles) // 参数是否数组
+    if (!rolesIsArr) {
+      //			asyncRoutes0 = roles.Routes.filter(item =>
+      //				item.selected
+      //			);
+      console.log(roles.Routes)
+      asyncRoutes0 = readNodes(roles.Routes, [])
+      console.log(asyncRoutes0)
     }
-    ]
-    //		let b = [{
-    //			path: '/icon',
-    //			component: Layout,
-    //			children: [{
-    //				path: 'index',
-    //				component: () =>
-    //					import('@/views/icons/index'),
-    //				name: 'Icons',
-    //				meta: {
-    //					title: 'icons',
-    //					icon: 'icon',
-    //					noCache: true
-    //				}
-    //			}]
-    //		}]
-    asyncRoutes0 = routesSetUrl(a)
-    asyncRoutes0 = asyncRoutes
-    //      asyncRoutes0 = b;
+    function readNodes(nodes, arr = []) {
+      for (const item of nodes) {
+        if (!item.selected) continue
+        const obj = { ...item,
+          children: []
+        }
+        arr.push(obj)
+        if (item.children && item.children.length) readNodes(item.children, obj.children)
+      }
+      return arr
+    }
+    console.log(asyncRoutes0)
     return new Promise(resolve => {
       console.log(resolve)
       let accessedRoutes
-      if (roles.includes('admin')) {
+      if (rolesIsArr && roles.includes('admin')) {
         accessedRoutes = asyncRoutes0 || []
       } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes0, roles)
+        // accessedRoutes = filterAsyncRoutes(asyncRoutes0, roles)
+        accessedRoutes = asyncRoutes0 || []
       }
-      commit('SET_ROUTES', accessedRoutes)
+      console.log(asyncRoutes0, accessedRoutes)
+      commit('SET_ROUTES', accessedRoutes) // 决定左侧导航
       resolve(accessedRoutes)
     })
   }
 }
-
 export default {
   namespaced: true,
   state,
