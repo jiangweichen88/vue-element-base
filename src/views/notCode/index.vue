@@ -1,5 +1,5 @@
 <template>
-  <div class="notCode" />
+ <div class="notCode">暂未开发</div>
 </template>
 
 <script>

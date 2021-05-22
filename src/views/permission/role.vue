@@ -180,6 +180,7 @@ export default {
       this.$nextTick(() => {
         const routes = this.generateRoutes(this.role.routes)
         this.$refs.tree.setCheckedNodes(this.generateArr(routes))
+        console.log(this.role.routes,routes)
         // set checked state of a node not affects its father and child nodes
         this.checkStrictly = false
       })
@@ -236,7 +237,7 @@ export default {
         this.role.key = data.key
         this.rolesList.push(this.role)
       }
-
+console.log(this.role.routes,this.rolesList)
       const { description, key, name } = this.role
       this.dialogVisible = false
       this.$notify({

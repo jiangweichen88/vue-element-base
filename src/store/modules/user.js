@@ -101,7 +101,7 @@ const actions = {
     })
   },
 
-  // dynamically modify permissions
+  // 动态地修改权限
   async changeRoles({ commit, dispatch }, role) {
     const token = role + '-token'
 
@@ -112,9 +112,9 @@ const actions = {
 
     resetRouter()
 
-    // generate accessible routes map based on roles
+    // 生成基于角色的可访问路由图
     const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
-    // dynamically add accessible routes
+    // 动态添加可访问的路由
     router.addRoutes(accessRoutes)
 
     // reset visited views and cached views
