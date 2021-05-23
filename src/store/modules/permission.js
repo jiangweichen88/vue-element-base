@@ -88,7 +88,7 @@ const actions = {
 		})
 		let asyncRoutes0
 		const abc = await getRoutes() // 请求路由json
-		asyncRoutes0 = routesSetUrl(abc.data)
+		asyncRoutes0 = routesSetUrl(readNodes(abc.data))
 		const rolesIsArr = Array.isArray(roles) // 参数是否数组
 		if(!rolesIsArr) {
 			asyncRoutes0 = routesSetUrl(readNodes(roles.Routes));

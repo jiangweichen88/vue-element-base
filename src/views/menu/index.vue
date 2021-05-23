@@ -15,7 +15,7 @@
 		<el-container class="h0">
 			<el-aside class="mar0 pad0">
 				<!--:render-content="renderContent"-->
-				<el-tree :render-content="renderContent" ref="tree" :render-after-expand="false" class="permission-tree h100" :default-checked-keys="defaultCheckedKeys" show-checkbox draggable :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" node-key="pathFull" @node-click="nodeClick" @node-drop="handleDrop" @node-expand="nodeExpand" />
+				<el-tree @check="check" :render-content="renderContent" ref="tree" :render-after-expand="false" class="permission-tree h100" :default-checked-keys="defaultCheckedKeys" show-checkbox draggable :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" node-key="pathFull" @node-click="nodeClick" @node-drop="handleDrop" @node-expand="nodeExpand" />
 				<!--<span class="custom-tree-node dis-f" :slot-scope="{ node, data }">
         <span class="ellipsis padr10 flex1 w0">
         	{{ node.label }}
@@ -72,7 +72,7 @@
 	import router from '@/router'
 	import { resetRouter } from '@/router'
 	import { routesSetUrl } from '@/store/modules/permission.js'
-	import { closest, queryElement, addClass,readNodes } from '@/utils/common.js'
+	import { closest, queryElement, addClass, readNodes } from '@/utils/common.js'
 
 	const defaultRole = {
 		key: '',
@@ -118,17 +118,25 @@
 		},
 		computed: {
 			routesData() {
+				console.log('computed')
 				this.defaultCheckedKeys = this.getCheckedKeys_(this.serviceRoutes);
-//				console.log(this.defaultCheckedKeys);
+				//console.log(this.defaultCheckedKeys);
 				this.$nextTick(() => {
 					// DOM 更新了
-//					let parent = closest(queryElement('.isOneChildren')[0], '.el-tree-node');
-//					addClass(parent, 'isOneChildren-node')
+					//					let parent = closest(queryElement('.isOneChildren')[0], '.el-tree-node');
+					//					addClass(parent, 'isOneChildren-node')
 				})
-
-				//				closest()
-				//				this.routes.filter(item => item.selected).map(item => item.path);
 				return this.serviceRoutes
+
+			}
+		},
+		watch: {
+			serviceRoutes: {
+				handler(newName, oldName) {
+					console.log('watch')
+				},
+				deep: true,
+				immediate: true,
 			}
 		},
 		created() {
@@ -139,6 +147,16 @@
 		methods: {
 			nodeExpand() {
 
+			},
+			check(){//tree复选框
+//				console.log(arguments);
+				setS(arguments[0],arguments[0].selected);
+				function setS(data,flag){
+					data.selected=!flag;
+					if(data.children&&data.children.length){
+						data.children.map(item=>setS(item,flag))
+					}
+				}
 			},
 			getCheckedKeys_(routes) {
 				const a = [].concat(...routes.filter(item => item.selected).map(item => {
@@ -172,7 +190,7 @@
 				this.changeArrs = [deepClone(this.routes0)]
 			},
 			nodeClick(item) {
-//				console.log(item);
+				//				console.log(item);
 				if(item.meta.isOneChildren) {
 					this.form = item.children[0]
 				} else {
@@ -181,7 +199,6 @@
 				}
 			},
 			handleDrop(draggingNode, dropNode, dropType, ev) {
-				this.serviceRoutes=readNodes(this.serviceRoutes)
 				this.changeArrsFn()
 			},
 			changeArrsFn() {
@@ -205,7 +222,7 @@
 				if(!data.children) {
 					data.component = "layout/index";
 					data.redirect = "/dashboard/index"
-//					data.children.push()
+					//					data.children.push()
 					this.$set(data, 'children', [newChild]);
 				} else {
 					data.children.push(newChild);
@@ -214,7 +231,7 @@
 			},
 
 			remove(node, data) {
-//				console.log(node, data)
+				//				console.log(node, data)
 				const parent = node.parent
 				const children = parent.data.children || parent.data
 				const index = children.findIndex(d => d.path === data.pathFull)
@@ -240,16 +257,15 @@
 			},
 			async getRoutes() {
 				const res = await getRoutes()
-				this.serviceRoutes = this.i18n(readNodes0(res.data))
-				this.routes0=deepClone(this.serviceRoutes)
-//				console.log(res, this.serviceRoutes)
-
-				function readNodes0(nodes, basePath = '/', arr = [],num=0) { // 过滤得到树形结构hidden不为true的项
+				this.serviceRoutes =res.data; 
+				this.serviceRoutes=this.i18n(readNodes0(res.data))
+				this.routes0 = deepClone(this.serviceRoutes)
+				function readNodes0(nodes, basePath = '/', arr = [], num = 0) { // 过滤得到树形结构hidden不为true的项
 					for(let item of nodes) {
 						if(item.hidden) continue
 						let obj = { ...item,
 							pathFull: path.resolve(basePath, item.path),
-							num:num+1
+							num: num + 1
 						}
 						arr.push(obj)
 						if(item.children && item.children.length) {
@@ -261,20 +277,12 @@
 								item.meta.breadcrumb = false;
 								item.meta.isOneChildren = true;
 							}
-							readNodes0(item.children, item.path, obj.children,num+1)
+							readNodes0(item.children, item.path, obj.children, num + 1)
 						}
 					}
 					return arr
 				}
-				//				let routes = this.generateRoutes(res.data)
-				//				console.log(routes)
-				//				this.routes = this.i18n(routes)
-				//				this.serviceRoutes = deepClone(this.routes)
 				this.changeArrs = [deepClone(this.serviceRoutes)];
-			},
-			async getRoles() {
-				const res = await getRoles()
-				this.rolesList = res.data
 			},
 			i18n(routes) {
 				const app = routes.map(route => {
@@ -335,123 +343,12 @@
 				})
 				return data
 			},
-			handleAddRole() {
-				this.role = Object.assign({}, defaultRole)
-				if(this.$refs.tree) {
-					this.$refs.tree.setCheckedNodes([])
-				}
-				this.dialogType = 'new'
-				this.dialogVisible = true
-			},
-			handleEdit() {
-				this.checkStrictly = true
-				this.$nextTick(() => {
-					const routes = this.generateRoutes(this.routes)
-					this.$refs.tree.setCheckedNodes(this.generateArr(routes))
-					// 设置节点的检查状态不会影响其父节点和子节点
-					this.checkStrictly = false
-				})
-			},
-			handleDelete({
-				$index,
-				row
-			}) {
-				this.$confirm('Confirm to remove the role?', 'Warning', {
-						confirmButtonText: 'Confirm',
-						cancelButtonText: 'Cancel',
-						type: 'warning'
-					})
-					.then(async() => {
-						await deleteRole(row.key)
-						this.rolesList.splice($index, 1)
-						this.$message({
-							type: 'success',
-							message: 'Delete succed!'
-						})
-					})
-					.catch(err => {
-						console.error(err)
-					})
-			},
-			generateTree(routes, basePath = '/', checkedKeys) {
-				const res = []
-				for(const route of routes) {
-					const routePath = route.pathFull
-					// recursive child routes
-					if(route.children && route.children.length) {
-						route.children = this.generateTree(route.children, routePath, checkedKeys)
-					} else if(!route.children) {
-						delete route.children
-					}
-					if(checkedKeys.includes(routePath)) {
-						//						|| (route.children && route.children.length >= 1)
-						res.push({ ...route,
-							...{
-								'selected': true
-							}
-						})
-					} else {
-						res.push({ ...route,
-							...{
-								'selected': false
-							}
-						})
-					}
-				}
-				return res
-			},
 			async save() {
-				const isEdit = this.dialogType === 'edit'
-				const checkedKeys = this.$refs.tree.getCheckedKeys()
-				const checkedKeys2 = this.$refs.tree.getHalfCheckedKeys()
-				//    const checkedKeys = this.$refs.tree;
-				//    this.serviceRoutes
-				this.role.routes = this.generateTree(deepClone(this.serviceRoutes), '/', [...checkedKeys, ...checkedKeys2])
-//				console.log(this.serviceRoutes, this.routes, this.role.routes, checkedKeys, this.$refs.tree)
-				const aa = this.role.routes
-
+				console.log(this.serviceRoutes)
 				resetRouter(); //重置路由
-				// 生成基于角色的可访问路由图
-				//				const accessRoutes = await store.dispatch('permission/generateRoutes', ['admin']);
-				//				accessRoutes.pop();
 				await store.dispatch('permission/generateRoutes', {
-					Routes: aa
+					Routes: this.serviceRoutes
 				})
-				//				console.log(accessRoutes) // 动态添加可访问的路由
-				//        router.addRoutes(accessRoutes)
-
-				//				if(isEdit) {
-				//					await updateRole(this.role.key, this.role)
-				//					for(let index = 0; index < this.rolesList.length; index++) {
-				//						if(this.rolesList[index].key === this.role.key) {
-				//							this.rolesList.splice(index, 1, Object.assign({}, this.role))
-				//							break
-				//						}
-				//					}
-				//				} else {
-				//					const {
-				//						data
-				//					} = await addRole(this.role)
-				//					this.role.key = data.key
-				//					this.rolesList.push(this.role)
-				//				}
-				//
-				//				const {
-				//					description,
-				//					key,
-				//					name
-				//				} = this.role
-				//				this.dialogVisible = false
-				//				this.$notify({
-				//					title: 'Success',
-				//					dangerouslyUseHTMLString: true,
-				//					message: `
-				//          <div>Role Key: ${key}</div>
-				//          <div>Role Name: ${name}</div>
-				//          <div>Description: ${description}</div>
-				//        `,
-				//					type: 'success'
-				//				})
 			},
 			// reference: src/view/layout/components/Sidebar/SidebarItem.vue
 			onlyOneShowingChild(children = [], parent) {
