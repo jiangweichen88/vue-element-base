@@ -7,12 +7,14 @@ const constantRoutes = [
 		component: 'layout/index',
 		redirect: 'dashboard',
 		selected: true,
+		disabled: true,
 		meta: {
 			title: 'dashboard',
 		},
 		children: [{
 			path: 'dashboard',
 			selected: true,
+			disabled: true,
 			component: 'views/dashboard/index',
 			name: 'Dashboard',
 			meta: {
@@ -30,6 +32,7 @@ const asyncRoutes = [{
 		redirect: 'noRedirect',
 		name: 'menu',
 		selected: true,
+		disabled: true,
 		meta: {
 			title: 'menu',
 		},
@@ -38,6 +41,7 @@ const asyncRoutes = [{
 			component: 'views/menu/index',
 			name: 'menu',
 			selected: true,
+			disabled: true,
 			meta: {
 				title: 'menu',
 				roles: ['admin'],

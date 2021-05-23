@@ -118,7 +118,6 @@
 		},
 		computed: {
 			routesData() {
-				console.log('computed')
 				this.defaultCheckedKeys = this.getCheckedKeys_(this.serviceRoutes);
 				//console.log(this.defaultCheckedKeys);
 				this.$nextTick(() => {
@@ -133,7 +132,6 @@
 		watch: {
 			serviceRoutes: {
 				handler(newName, oldName) {
-					console.log('watch')
 				},
 				deep: true,
 				immediate: true,
@@ -348,7 +346,9 @@
 				resetRouter(); //重置路由
 				await store.dispatch('permission/generateRoutes', {
 					Routes: this.serviceRoutes
-				})
+				});
+				const checkedKeys = this.$refs.tree.getCheckedKeys(), visitedViews=this.$store.state.tagsView.visitedViews;
+				this.$store.state.tagsView.visitedViews=visitedViews.filter(item=>checkedKeys.indexOf(item.path )>-1);
 			},
 			// reference: src/view/layout/components/Sidebar/SidebarItem.vue
 			onlyOneShowingChild(children = [], parent) {
