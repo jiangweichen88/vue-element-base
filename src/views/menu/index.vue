@@ -15,7 +15,7 @@
 		<el-container class="h0">
 			<el-aside class="mar0 pad0">
 				<!--:render-content="renderContent"-->
-				<el-tree @check="treeCheck" :render-content="renderContent" ref="tree" :render-after-expand="false" class="permission-tree h100" :default-checked-keys="defaultCheckedKeys" show-checkbox draggable :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" node-key="pathFull" @node-click="nodeClick" @node-drop="handleDrop" @node-expand="nodeExpand" />
+				<el-tree class="permission-tree h100" @check="treeCheck" :render-content="renderContent" ref="tree" :render-after-expand="false" :default-checked-keys="defaultCheckedKeys" show-checkbox draggable :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" node-key="pathFull" @node-click="nodeClick" @node-drop="handleDrop" @node-expand="nodeExpand" />
 				<!--<span class="custom-tree-node dis-f" :slot-scope="{ node, data }">
         <span class="ellipsis padr10 flex1 w0">
         	{{ node.label }}
@@ -109,14 +109,15 @@
 					// DOM 更新了
 					//					let parent = closest(queryElement('.isOneChildren')[0], '.el-tree-node');
 					//					addClass(parent, 'isOneChildren-node')
-				})
-				return this.serviceRoutes
+				});
+				return this.serviceRoutes 
 
 			}
 		},
 		watch: {
 			serviceRoutes: {
-				handler(newName, oldName) {},
+				handler(newName, oldName) {
+				},
 				deep: true,
 				immediate: true,
 			}
@@ -181,9 +182,11 @@
 				}
 			},
 			handleDrop(draggingNode, dropNode, dropType, ev) {
-				this.changeArrsFn()
+				this.changeArrsFn();
 			},
 			changeArrsFn() {
+				this.serviceRoutes=this.readNodes1(this.serviceRoutes);
+				console.log(this.serviceRoutes)
 				this.changeArrs.push(deepClone(this.serviceRoutes))
 			},
 			append(node, data) {
@@ -237,34 +240,62 @@
         </span>
 				)
 			},
+			readNodes0(nodes, basePath = '/', arr = [], num = 0) { // 过滤得到树形结构hidden不为true的项
+				const _this = this;
+				for(let item of nodes) {
+					if(item.hidden) continue
+					let obj = { ...item,
+						pathFull: path.resolve(basePath, item.path),
+						num: num + 1
+					}
+					arr.push(obj)
+					if(item.children && item.children.length) {
+						obj.children = [];
+						if(!item.alwaysShow && item.children.length == 1) {
+							if(!item.meta) {
+								item.meta = {};
+							}
+							item.meta.breadcrumb = false;
+							item.meta.isOneChildren = true;
+						}
+						_this.readNodes0(item.children, item.path, obj.children, num + 1)
+					}
+				}
+				return arr
+			},
+			readNodes1(nodes, arr = [], num = 0) {
+				if(!nodes||!nodes.length){
+					return 
+				}
+				nodes.map(item => {
+					let obj = { ...item,
+						num: num + 1
+					}
+					if(obj.num > 1 && obj.component == "layout/index") {//层级为1，component = "layout/index"
+						obj.component = nodes.filter(item2 => item2.component != obj.component)[0].component;
+					}else if(obj.num==1&&obj.component != "layout/index"){
+						obj.component = "layout/index"
+					}
+					arr.push(obj)
+					if(item.children && item.children.length) {
+						obj.children = [];
+						if(!item.alwaysShow && item.children.length == 1) {
+							if(!item.meta) {
+								item.meta = {};
+							}
+							item.meta.breadcrumb = false;
+							item.meta.isOneChildren = true;
+						}
+						this.readNodes1(item.children, obj.children, num + 1)
+					}
+				})
+				return arr
+			},
 			async getRoutes() {
 				const res = await getRoutes()
 				this.serviceRoutes = res.data;
-				this.serviceRoutes = this.i18n(readNodes0(res.data))
+				this.serviceRoutes = this.i18n(this.readNodes0(res.data))
 				this.routes0 = deepClone(this.serviceRoutes)
-
-				function readNodes0(nodes, basePath = '/', arr = [], num = 0) { // 过滤得到树形结构hidden不为true的项
-					for(let item of nodes) {
-						if(item.hidden) continue
-						let obj = { ...item,
-							pathFull: path.resolve(basePath, item.path),
-							num: num + 1
-						}
-						arr.push(obj)
-						if(item.children && item.children.length) {
-							obj.children = [];
-							if(!item.alwaysShow && item.children.length == 1) {
-								if(!item.meta) {
-									item.meta = {};
-								}
-								item.meta.breadcrumb = false;
-								item.meta.isOneChildren = true;
-							}
-							readNodes0(item.children, item.path, obj.children, num + 1)
-						}
-					}
-					return arr
-				}
 				this.changeArrs = [deepClone(this.serviceRoutes)];
 			},
 			i18n(routes) {
