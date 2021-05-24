@@ -110,7 +110,7 @@
 					//					let parent = closest(queryElement('.isOneChildren')[0], '.el-tree-node');
 					//					addClass(parent, 'isOneChildren-node')
 				});
-				return this.serviceRoutes 
+				return this.serviceRoutes
 
 			}
 		},
@@ -170,21 +170,34 @@
 
 			},
 			treeCheck() { //tree复选框
-								console.log(arguments);
-				setS(arguments[0], arguments[0].selected);
-                arguments[1].halfCheckedNodes.forEach(item=>item.selected=true)
-				function setS(data, flag) {
-					data.selected = !flag;
-					if(data.children && data.children.length) {
-						data.children.map(item => setS(item, flag))
+//				console.log(arguments,this.serviceRoutes);
+				fn(this.serviceRoutes);
+				arguments[1].checkedNodes.concat(arguments[1].halfCheckedNodes).forEach(item => item.selected = true);
+				function fn(data) {
+					if(!data||!data.length){
+						return 
 					}
+                    data.forEach(item=>{
+                   	item.selected=false;
+                   	  if(item.children && item.children.length){
+                   	  	   fn(item.children);
+                   	  }
+                   });
+                   return data
 				}
+				//				setS(arguments[0], arguments[0].selected)
+				//				function setS(data, flag) {
+				//					data.selected = !flag;
+				//					if(data.children && data.children.length) {
+				//						data.children.map(item => setS(item, flag))
+				//					}
+				//				}
 			},
 			handleDrop(draggingNode, dropNode, dropType, ev) {
 				this.changeArrsFn();
 			},
 			changeArrsFn() {
-				this.serviceRoutes=this.readNodes1(this.serviceRoutes);
+				this.serviceRoutes = this.readNodes1(this.serviceRoutes);
 				console.log(this.serviceRoutes)
 				this.changeArrs.push(deepClone(this.serviceRoutes))
 			},
@@ -263,16 +276,16 @@
 				return arr
 			},
 			readNodes1(nodes, arr = [], num = 0) {
-				if(!nodes||!nodes.length){
-					return 
+				if(!nodes || !nodes.length) {
+					return
 				}
 				nodes.map(item => {
 					let obj = { ...item,
 						num: num + 1
 					}
-					if(obj.num > 1 && obj.component == "layout/index") {//层级为1，component = "layout/index"
+					if(obj.num > 1 && obj.component == "layout/index") { //层级为1，component = "layout/index"
 						obj.component = nodes.filter(item2 => item2.component != obj.component)[0].component;
-					}else if(obj.num==1&&obj.component != "layout/index"){
+					} else if(obj.num == 1 && obj.component != "layout/index") {
 						obj.component = "layout/index"
 					}
 					arr.push(obj)
@@ -345,7 +358,7 @@
 			},
 			async save() {
 				console.log(this.serviceRoutes)
-				resetRouter(); //重置路由
+				//				resetRouter(); //重置路由
 				await store.dispatch('permission/generateRoutes', {
 					Routes: this.serviceRoutes
 				});
