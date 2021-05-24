@@ -66,7 +66,6 @@ import path from 'path'
 import { deepClone } from '@/utils'
 import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 import i18n from '@/lang'
-import { asyncRoutes } from '@/role/asyncRoutes.js'
 const defaultRole = {
   key: '',
   name: '',

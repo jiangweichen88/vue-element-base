@@ -100,7 +100,7 @@ const asyncRoutes = [{
 		},
 		children: [{
 				path: '/guide', // 引导页
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				redirect: 'noRedirect',
 				selected: true,
 				meta: {
@@ -119,7 +119,7 @@ const asyncRoutes = [{
 			},
 			{
 				path: '/icon',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				selected: true,
 				children: [{
 					path: 'index',
@@ -134,7 +134,7 @@ const asyncRoutes = [{
 			},
 			{
 				path: '/components',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				redirect: 'noRedirect',
 				name: 'ComponentDemo',
 				selected: true,
@@ -254,7 +254,7 @@ const asyncRoutes = [{
 			},
 			{
 				path: '/table',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				redirect: 'noRedirect',
 				name: 'Table',
 				selected: true,
@@ -302,7 +302,7 @@ const asyncRoutes = [{
 			},
 			{
 				path: '/demo/example',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				redirect: 'noRedirect',
 				name: 'Example',
 				selected: true,
@@ -347,7 +347,7 @@ const asyncRoutes = [{
 
 			{
 				path: '/error',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				redirect: 'noRedirect',
 				name: 'ErrorPages',
 				selected: true,
@@ -379,7 +379,7 @@ const asyncRoutes = [{
 			},
 			{
 				path: '/export',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				redirect: 'noRedirect',
 				name: 'export',
 				selected: true,
@@ -460,7 +460,7 @@ const asyncRoutes = [{
 
 			{
 				path: 'external-link',
-				component: 'views/demo/index',
+				component: 'views/com/index',
 				selected: true,
 				children: [{
 					path: 'https://github.com/jiangweichen88/vue-element-base',

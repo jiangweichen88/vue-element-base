@@ -284,7 +284,8 @@
 						num: num + 1
 					}
 					if(obj.num > 1 && obj.component == "layout/index") { //层级为1，component = "layout/index"
-						obj.component = nodes.filter(item2 => item2.component != obj.component)[0].component;
+//						obj.component = nodes.filter(item2 => item2.component != obj.component)[0].component;
+						obj.component ='views/com/index';
 					} else if(obj.num == 1 && obj.component != "layout/index") {
 						obj.component = "layout/index"
 					}
@@ -358,7 +359,7 @@
 			},
 			async save() {
 				console.log(this.serviceRoutes)
-				//				resetRouter(); //重置路由
+								resetRouter(); //重置路由
 				await store.dispatch('permission/generateRoutes', {
 					Routes: this.serviceRoutes
 				});

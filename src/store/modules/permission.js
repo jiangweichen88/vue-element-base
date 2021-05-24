@@ -1,6 +1,4 @@
 import { constantRoutes } from '@/router'
-import { asyncRoutes } from '@/role/asyncRoutes.js'
-import demo from '@/role/modules/demo.js'
 import { getRoutesObj } from '@/api/role.js'
 /* Layout */
 import Layout from '@/layout'
