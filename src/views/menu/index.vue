@@ -194,11 +194,12 @@
 				//				}
 			},
 			handleDrop(draggingNode, dropNode, dropType, ev) {
+				console.log(draggingNode, dropNode, dropType, ev)
 				this.changeArrsFn();
 			},
 			changeArrsFn() {
-				this.serviceRoutes = this.readNodes1(this.serviceRoutes);
-//				console.log(this.serviceRoutes)
+				setTimeout(()=>this.serviceRoutes = this.readNodes1(this.serviceRoutes))
+				console.log(this.serviceRoutes)
 				this.changeArrs.push(deepClone(this.serviceRoutes))
 			},
 			append(node, data) {
@@ -275,40 +276,35 @@
 				}
 				return arr
 			},
-			readNodes1(nodes, arr = [], num = 0) {
-				if(!nodes || !nodes.length) {
-					return
-				}
-				nodes.map(item => {
-					let obj = { ...item,
-						num: num + 1
+			readNodes1(nodes, num = 0) {
+				nodes.map((item,index )=> {
+					item.num=num + 1
+					if(item.num > 1 && item.component == "layout/index") { //儿子有首层
+						item.component ='views/com/index';
+					}else if(item.num == 1 && item.component== "layout/index"&&(!item.children||!item.children.length)){//首层剩空盒子 删除
+						nodes.splice(index,1)
 					}
-					if(obj.num > 1 && obj.component == "layout/index") { //层级为1，component = "layout/index"
-						obj.component ='views/com/index';
-						arr.push(obj)
-					} else if(obj.num == 1 && obj.component != "layout/index") {
-						if(!obj.children||!obj.children.length){
-							obj.children=[deepClone(obj)]
+					else if(item.num == 1 && item.component != "layout/index") {//首层有节点 转换
+						if(!item.children || !item.children.length){//单节点
+							console.log('单节点',item)
+							item.children=deepClone(item);
 						}
-						obj.component = "layout/index"
-						arr.push(obj)
-					}else if(obj.num == 1 && obj.component == "layout/index"&&(!obj.children||!obj.children.length)){
-					}else{
-						arr.push(obj)
+						item.component = "layout/index";
 					}
 					if(item.children && item.children.length) {
-						obj.children = [];
 						if(!item.alwaysShow && item.children.length == 1) {
 							if(!item.meta) {
 								item.meta = {};
 							}
 							item.meta.breadcrumb = false;
 							item.meta.isOneChildren = true;
+						}else {
+							item.meta.isOneChildren = false;
+							this.readNodes1(item.children, num + 1)
 						}
-						this.readNodes1(item.children, obj.children, num + 1)
 					}
 				})
-				return arr
+				return nodes
 			},
 			async getRoutes() {
 				const res = await getRoutes()
