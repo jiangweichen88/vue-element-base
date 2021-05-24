@@ -15,7 +15,7 @@
 		<el-container class="h0">
 			<el-aside class="mar0 pad0">
 				<!--:render-content="renderContent"-->
-				<el-tree @check="check" :render-content="renderContent" ref="tree" :render-after-expand="false" class="permission-tree h100" :default-checked-keys="defaultCheckedKeys" show-checkbox draggable :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" node-key="pathFull" @node-click="nodeClick" @node-drop="handleDrop" @node-expand="nodeExpand" />
+				<el-tree @check="treeCheck" :render-content="renderContent" ref="tree" :render-after-expand="false" class="permission-tree h100" :default-checked-keys="defaultCheckedKeys" show-checkbox draggable :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" node-key="pathFull" @node-click="nodeClick" @node-drop="handleDrop" @node-expand="nodeExpand" />
 				<!--<span class="custom-tree-node dis-f" :slot-scope="{ node, data }">
         <span class="ellipsis padr10 flex1 w0">
         	{{ node.label }}
@@ -66,34 +66,22 @@
 	import { deepClone } from '@/utils'
 	import { getRoutes } from '@/api/role'
 	import i18n from '@/lang'
-	import { asyncRoutes } from '@/role/asyncRoutes.js'
 	import icons from '@/views/icons/index'
 	import store from '@/store'
 	import router from '@/router'
 	import { resetRouter } from '@/router'
 	import { routesSetUrl } from '@/store/modules/permission.js'
 	import { closest, queryElement, addClass, readNodes } from '@/utils/common.js'
-
-	const defaultRole = {
-		key: '',
-		name: '',
-		description: '',
-		routes: []
-	}
-
 	export default {
 		components: {
 			icons
 		},
 		data() {
 			return {
-				role: Object.assign({}, defaultRole),
-				routes: [],
+				serviceRoutes: [],
 				routes0: [],
-				rolesList: [],
-				dialogVisible: false,
-				dialogType: 'new',
 				checkStrictly: false,
+				defaultCheckedKeys: [],
 				defaultProps: {
 					children: 'children',
 					label: function(data, node) {
@@ -104,7 +92,6 @@
 						}
 					}
 				},
-				changeArrs: [],
 				form: {
 
 				},
@@ -112,14 +99,12 @@
 				iconsOpt: {
 					tooltip: false
 				},
-				defaultCheckedKeys: [],
-				serviceRoutes: []
+				changeArrs: [],
 			}
 		},
 		computed: {
 			routesData() {
 				this.defaultCheckedKeys = this.getCheckedKeys_(this.serviceRoutes);
-				//console.log(this.defaultCheckedKeys);
 				this.$nextTick(() => {
 					// DOM 更新了
 					//					let parent = closest(queryElement('.isOneChildren')[0], '.el-tree-node');
@@ -131,50 +116,25 @@
 		},
 		watch: {
 			serviceRoutes: {
-				handler(newName, oldName) {
-				},
+				handler(newName, oldName) {},
 				deep: true,
 				immediate: true,
 			}
 		},
 		created() {
-			// Mock: get all routes and roles list from server
 			this.getRoutes()
 		},
 		mounted() {},
 		methods: {
-			nodeExpand() {
-
-			},
-			check(){//tree复选框
-//				console.log(arguments);
-				setS(arguments[0],arguments[0].selected);
-				function setS(data,flag){
-					data.selected=!flag;
-					if(data.children&&data.children.length){
-						data.children.map(item=>setS(item,flag))
-					}
-				}
-			},
-			getCheckedKeys_(routes) {
-				const a = [].concat(...routes.filter(item => item.selected).map(item => {
-					if(item.children && item.children.length) {
-						return this.getCheckedKeys_(item.children)
-					} else {
-						return item.pathFull
-					}
-				}))
-				return a
-			},
 			iconClick(item) {
 				this.dialogVisible = false
 				this.form.meta.icon = item
 			},
-			handleClose(done) {
-				done()
-			},
 			setIcon() {
 				this.dialogVisible = true
+			},
+			handleClose(done) {
+				done()
 			},
 			back() {
 				const changeArrs = this.changeArrs
@@ -188,12 +148,36 @@
 				this.changeArrs = [deepClone(this.routes0)]
 			},
 			nodeClick(item) {
-				//				console.log(item);
+				//console.log(item);
 				if(item.meta.isOneChildren) {
 					this.form = item.children[0]
 				} else {
 
 					this.form = item
+				}
+			},
+			getCheckedKeys_(routes) {
+				const a = [].concat(...routes.filter(item => item.selected).map(item => {
+					if(item.children && item.children.length) {
+						return this.getCheckedKeys_(item.children)
+					} else {
+						return item.pathFull
+					}
+				}))
+				return a
+			},
+			nodeExpand() {
+
+			},
+			treeCheck() { //tree复选框
+				//				console.log(arguments);
+				setS(arguments[0], arguments[0].selected);
+
+				function setS(data, flag) {
+					data.selected = !flag;
+					if(data.children && data.children.length) {
+						data.children.map(item => setS(item, flag))
+					}
 				}
 			},
 			handleDrop(draggingNode, dropNode, dropType, ev) {
@@ -242,7 +226,7 @@
 				data,
 				store
 			}) {
-				let cs = data.meta.isOneChildren ? 'isOneChildren' : '';
+				const cs = data.meta.isOneChildren ? 'isOneChildren' : '';
 				return(
 					<span  class={"custom-tree-node dis-f "+cs} >
           <span class="ellipsis padr10 flex1 w0">{node.label}</span>
@@ -255,9 +239,10 @@
 			},
 			async getRoutes() {
 				const res = await getRoutes()
-				this.serviceRoutes =res.data; 
-				this.serviceRoutes=this.i18n(readNodes0(res.data))
+				this.serviceRoutes = res.data;
+				this.serviceRoutes = this.i18n(readNodes0(res.data))
 				this.routes0 = deepClone(this.serviceRoutes)
+
 				function readNodes0(nodes, basePath = '/', arr = [], num = 0) { // 过滤得到树形结构hidden不为true的项
 					for(let item of nodes) {
 						if(item.hidden) continue
@@ -328,27 +313,15 @@
 				}
 				return res
 			},
-			generateArr(routes) {
-				let data = []
-				routes.forEach(route => {
-					data.push(route)
-					if(route.children) {
-						const temp = this.generateArr(route.children)
-						if(temp.length > 0) {
-							data = [...data, ...temp]
-						}
-					}
-				})
-				return data
-			},
 			async save() {
 				console.log(this.serviceRoutes)
 				resetRouter(); //重置路由
 				await store.dispatch('permission/generateRoutes', {
 					Routes: this.serviceRoutes
 				});
-				const checkedKeys = this.$refs.tree.getCheckedKeys(), visitedViews=this.$store.state.tagsView.visitedViews;
-				this.$store.state.tagsView.visitedViews=visitedViews.filter(item=>checkedKeys.indexOf(item.path )>-1);
+				const checkedKeys = this.$refs.tree.getCheckedKeys(),
+					visitedViews = this.$store.state.tagsView.visitedViews;
+				this.$store.state.tagsView.visitedViews = visitedViews.filter(item => checkedKeys.indexOf(item.path) > -1);
 			},
 			// reference: src/view/layout/components/Sidebar/SidebarItem.vue
 			onlyOneShowingChild(children = [], parent) {
