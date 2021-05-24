@@ -116,8 +116,7 @@
 		},
 		watch: {
 			serviceRoutes: {
-				handler(newName, oldName) {
-				},
+				handler(newName, oldName) {},
 				deep: true,
 				immediate: true,
 			}
@@ -171,9 +170,9 @@
 
 			},
 			treeCheck() { //tree复选框
-				//				console.log(arguments);
+								console.log(arguments);
 				setS(arguments[0], arguments[0].selected);
-
+                arguments[1].halfCheckedNodes.forEach(item=>item.selected=true)
 				function setS(data, flag) {
 					data.selected = !flag;
 					if(data.children && data.children.length) {
