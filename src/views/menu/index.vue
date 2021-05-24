@@ -198,7 +198,7 @@
 			},
 			changeArrsFn() {
 				this.serviceRoutes = this.readNodes1(this.serviceRoutes);
-				console.log(this.serviceRoutes)
+//				console.log(this.serviceRoutes)
 				this.changeArrs.push(deepClone(this.serviceRoutes))
 			},
 			append(node, data) {
@@ -284,12 +284,18 @@
 						num: num + 1
 					}
 					if(obj.num > 1 && obj.component == "layout/index") { //层级为1，component = "layout/index"
-//						obj.component = nodes.filter(item2 => item2.component != obj.component)[0].component;
 						obj.component ='views/com/index';
+						arr.push(obj)
 					} else if(obj.num == 1 && obj.component != "layout/index") {
+						if(!obj.children||!obj.children.length){
+							obj.children=[deepClone(obj)]
+						}
 						obj.component = "layout/index"
+						arr.push(obj)
+					}else if(obj.num == 1 && obj.component == "layout/index"&&(!obj.children||!obj.children.length)){
+					}else{
+						arr.push(obj)
 					}
-					arr.push(obj)
 					if(item.children && item.children.length) {
 						obj.children = [];
 						if(!item.alwaysShow && item.children.length == 1) {
