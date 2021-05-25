@@ -32,6 +32,7 @@
           @node-click="nodeClick"
           @node-drop="handleDrop"
           @node-expand="nodeExpand"
+          :allow-drag="allowDrag"
         />
         <!--<span class="custom-tree-node dis-f" :slot-scope="{ node, data }">
         <span class="ellipsis padr10 flex1 w0">
@@ -184,6 +185,10 @@ export default {
     nodeExpand() {
 
     },
+          allowDrag(draggingNode) {
+          	console.log(draggingNode)
+          	return draggingNode.data.children
+      },
     treeCheck() { // tree复选框
       //				console.log(arguments,this.serviceRoutes);
       fn(this.serviceRoutes)
@@ -321,7 +326,8 @@ export default {
           }
           item.component = 'layout/index';
           item.redirect= "noRedirect";
-           item.path=item.pathFull.split('/')[0];
+          console.log(item.pathFull.split('/'))
+           item.path=item.pathFull.split('/')[0]||item.pathFull.split('/')[1];
         }
         if (item.children && item.children.length) {
           if (!item.alwaysShow && item.children.length == 1) {

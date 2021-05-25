@@ -46,6 +46,7 @@ export function addClass(obj, cls){
   added = obj_class + blank + cls;//组合原来的 class 和需要添加的 class.
   obj.className = added;//替换原来的 class.
 }
+
 /* 数组 start---------------*/
 //树结构筛选
 export function treeFilter (tree, func) {
