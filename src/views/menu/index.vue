@@ -315,7 +315,9 @@ export default {
         item.num = num + 1
         if (item.num > 1 && item.component == 'layout/index') { // 儿子有首层
           item.component = 'views/com/index'
-        } 
+        } else if(item.num == 1 && item.component != "layout/index") {//首层有节点 转换
+						item.component = "layout/index";
+					}
         if (item.children && item.children.length) {
           if (!item.alwaysShow && item.children.length == 1) {
             if (!item.meta) {
@@ -386,7 +388,7 @@ export default {
     },
     async save() {
       console.log(this.serviceRoutes)
-//    resetRouter() // 重置路由
+      resetRouter() // 重置路由
       await store.dispatch('permission/generateRoutes', {
         Routes: this.serviceRoutes
       })

@@ -62,22 +62,6 @@ export const constantRoutes = [{
     import('@/views/error-page/401'),
   hidden: true
 },
-{
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    component: () =>
-      import('@/views/dashboard/index'),
-    name: 'Dashboard',
-    meta: {
-      title: 'dashboard',
-      icon: 'dashboard',
-      affix: true
-    }
-  }]
-}
 
 ]
 
@@ -88,7 +72,7 @@ export const constantRoutes = [{
 // export const asyncRoutes = asyncRoutes;
 // store/modules/permission.js文件下
 
-const createRouter = () => new Router({
+export const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({
     y: 0
