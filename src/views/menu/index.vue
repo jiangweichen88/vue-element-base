@@ -33,7 +33,9 @@
           @node-drop="handleDrop"
           @node-expand="nodeExpand"
           :allow-drag="allowDrag"
+          :allow-drop="allowDrap"
         />
+           <!--:allow-drop="allowDrap"-->
         <!--<span class="custom-tree-node dis-f" :slot-scope="{ node, data }">
         <span class="ellipsis padr10 flex1 w0">
         	{{ node.label }}
@@ -89,7 +91,7 @@ import store from '@/store'
 import router from '@/router'
 import { resetRouter } from '@/router'
 import { routesSetUrl } from '@/store/modules/permission.js'
-import { closest, queryElement, addClass, readNodes,treeFilter ,treeFind,deleteTree} from '@/utils/common.js'
+import { closest, queryElement, addClass, readNodes,treeFilter ,treeFind,deleteTree,randomIntegerInRange} from '@/utils/common.js'
 export default {
   components: {
     icons
@@ -185,9 +187,18 @@ export default {
     nodeExpand() {
 
     },
-          allowDrag(draggingNode) {
-          	console.log(draggingNode)
-          	return draggingNode.data.children
+          allowDrag(draggingNode) {//拖拽
+          	console.log(draggingNode);
+          	return draggingNode.parent.childNodes.length>1
+      },
+      allowDrap(draggingNode, dropNode, type){
+//    	console.log(draggingNode, dropNode, type)
+      	if(dropNode.childNodes.findIndex(item=>item.path== draggingNode.data.path)){
+      		draggingNode.data.path+randomIntegerInRange(0,100)
+      	}
+      	return  dropNode.childNodes.length>0
+      	
+            
       },
     treeCheck() { // tree复选框
       //				console.log(arguments,this.serviceRoutes);
@@ -218,15 +229,7 @@ export default {
     },
 
     handleDrop(draggingNode, dropNode, dropType, ev) {
-      console.log(draggingNode, dropNode, dropType, ev)
-      const title = draggingNode.data.meta.title;
       this.changeArrsFn()
-       let b=treeFilter(this.serviceRoutes,(item)=>{return item.meta.title==title});
-       if(b.length>1){//首层有单节点
-       	       let c=deleteTree(this.serviceRoutes,(item)=>{return item.meta.title==title&&item.children&&item.children.length==0})
-       	       console.log(b,c,this.serviceRoutes);
-       	       this.serviceRoutes=c;
-       }
     },
     changeArrsFn() {
       this.serviceRoutes = JSON.parse(JSON.stringify(this.readNodes1(this.serviceRoutes)))
@@ -312,23 +315,7 @@ export default {
         item.num = num + 1
         if (item.num > 1 && item.component == 'layout/index') { // 儿子有首层
           item.component = 'views/com/index'
-        } else if (item.num == 1 && item.component == 'layout/index' && (!item.children || !item.children.length)) { // 首层剩空盒子 删除
-          nodes.splice(index, 1)
-        } else if (item.num == 1 && item.component != 'layout/index') { // 首层有节点 转换
-          if (!item.children || !item.children.length) { // 单节点
-            console.log('单节点', item)
-            item.children = [{ ...deepClone(item), ...{ num: 2 }}]
-            if (!item.meta) {
-              item.meta = {}
-            }
-            item.meta.breadcrumb = false
-            item.meta.isOneChildren = true
-          }
-          item.component = 'layout/index';
-          item.redirect= "noRedirect";
-          console.log(item.pathFull.split('/'))
-           item.path=item.pathFull.split('/')[0]||item.pathFull.split('/')[1];
-        }
+        } 
         if (item.children && item.children.length) {
           if (!item.alwaysShow && item.children.length == 1) {
             if (!item.meta) {
