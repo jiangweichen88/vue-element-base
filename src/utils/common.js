@@ -47,6 +47,74 @@ export function addClass(obj, cls){
   obj.className = added;//替换原来的 class.
 }
 /* 数组 start---------------*/
+//树结构筛选
+export function treeFilter (tree, func) {
+  // 使用map复制一下节点，避免修改到原树
+  return tree.map(node => ({ ...node })).filter(node => {
+    node.children = node.children && treeFilter(node.children, func)
+    return func(node) || (node.children && node.children.length)
+  })
+}
+//树结构查找
+export function treeFind (tree, func) {
+  for (const data of tree) {
+    if (func(data)) return data
+    if (data.children) {
+      const res = treeFind(data.children, func)
+      if (res) return res
+    }
+  }
+  return null
+}
+//删除树节点
+export function deleteTree(tree,func) {
+  let treeData = JSON.parse(JSON.stringify(tree));
+  const deleteParentNode = data => {
+    const ret = [];
+    for (let i = 0, l = data.length; i < l; i++) {
+      const node = data[i];
+      if (!func(node)) {
+        ret.push(node);
+      }
+      if (!func(node)&&!!node.children) {
+        node.children = deleteParentNode(node.children);
+      }
+    }
+    return ret;
+  };
+  return deleteParentNode(treeData);
+}
+//增加树节点
+function addTree(tree, parentId, addNodeData) {
+  // parentId 父节点id
+  let treeData = JSON.parse(JSON.stringify(tree));
+  const addNode = data => {
+    const ret = [];
+    for (let i = 0, l = data.length; i < l; i++) {
+      const node = data[i];
+      ret.push(node);
+      if (!!node.children) {
+        if (node.id === parentId) {
+          node.children = addNode([...node.children, ...addNodeData]);
+        } else {
+          node.children = addNode(node.children);
+        }
+      }
+    }
+    return ret;
+  };
+  return addNode(tree);
+}
+//查找多条节点路径
+export function treeFindPath (tree, func, path = [], result = []) {
+  for (const data of tree) {
+    path.push(data.id)
+    func(data) && result.push([...path])
+    data.children && treeFindPath(data.children, func, path, result)
+    path.pop()
+  }
+  return result
+}
 export function readNodes(nodes, arr = [],num=0) { // 过滤得到树形结构selected为true的项
 	for(const item of nodes) {
 		if(!item.selected) continue

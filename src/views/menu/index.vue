@@ -88,7 +88,7 @@ import store from '@/store'
 import router from '@/router'
 import { resetRouter } from '@/router'
 import { routesSetUrl } from '@/store/modules/permission.js'
-import { closest, queryElement, addClass, readNodes } from '@/utils/common.js'
+import { closest, queryElement, addClass, readNodes,treeFilter ,treeFind,deleteTree} from '@/utils/common.js'
 export default {
   components: {
     icons
@@ -214,8 +214,14 @@ export default {
 
     handleDrop(draggingNode, dropNode, dropType, ev) {
       console.log(draggingNode, dropNode, dropType, ev)
-      const title = draggingNode.data.meta.title
+      const title = draggingNode.data.meta.title;
       this.changeArrsFn()
+       let b=treeFilter(this.serviceRoutes,(item)=>{return item.meta.title==title});
+       if(b.length>1){//首层有单节点
+       	       let c=deleteTree(this.serviceRoutes,(item)=>{return item.meta.title==title&&item.children&&item.children.length==0})
+       	       console.log(b,c,this.serviceRoutes);
+       	       this.serviceRoutes=c;
+       }
     },
     changeArrsFn() {
       this.serviceRoutes = JSON.parse(JSON.stringify(this.readNodes1(this.serviceRoutes)))
@@ -273,7 +279,7 @@ export default {
         </span>
       )
     },
-    readNodes0(nodes, basePath = '/', arr = [], num = 0) { // 过滤得到树形结构hidden不为true的项
+    readNodes0(nodes, basePath = '/', arr = [], num = 0) { //首层加载  过滤得到树形结构hidden不为true的项
       const _this = this
       for (const item of nodes) {
         if (item.hidden) continue
@@ -303,7 +309,7 @@ export default {
           item.component = 'views/com/index'
         } else if (item.num == 1 && item.component == 'layout/index' && (!item.children || !item.children.length)) { // 首层剩空盒子 删除
           nodes.splice(index, 1)
-        } else if (item.num == 1 && item.component != 'layout/index') { // 首层节点 转换
+        } else if (item.num == 1 && item.component != 'layout/index') { // 首层有节点 转换
           if (!item.children || !item.children.length) { // 单节点
             console.log('单节点', item)
             item.children = [{ ...deepClone(item), ...{ num: 2 }}]
@@ -313,7 +319,9 @@ export default {
             item.meta.breadcrumb = false
             item.meta.isOneChildren = true
           }
-          item.component = 'layout/index'
+          item.component = 'layout/index';
+          item.redirect= "noRedirect";
+           item.path=item.pathFull.split('/')[0];
         }
         if (item.children && item.children.length) {
           if (!item.alwaysShow && item.children.length == 1) {
@@ -385,7 +393,7 @@ export default {
     },
     async save() {
       console.log(this.serviceRoutes)
-      resetRouter() // 重置路由
+//    resetRouter() // 重置路由
       await store.dispatch('permission/generateRoutes', {
         Routes: this.serviceRoutes
       })
