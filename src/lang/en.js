@@ -11,7 +11,7 @@ export default {
     components: 'Components',
     tinymce: 'Tinymce',
     markdown: 'Markdown',
-    jsonEditor: 'JSON Editor',
+   
     dndList: 'Dnd List',
     splitPane: 'SplitPane',
     avatarUpload: 'Avatar Upload',

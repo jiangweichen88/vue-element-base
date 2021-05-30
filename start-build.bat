@@ -1,4 +1,4 @@
 //call npm i
 call git pull
-call npm run build:stage
+call npm run build:prod
 pause

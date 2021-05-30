@@ -11,7 +11,7 @@ export default {
     components: 'コンポーネント',
     tinymce: 'TinyMCE',
     markdown: 'Markdown',
-    jsonEditor: 'JSON Editor',
+   
     dndList: 'Drag-And-Drop',
     splitPane: 'パネル',
     avatarUpload: 'アバターアップロード',
