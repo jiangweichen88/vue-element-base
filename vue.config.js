@@ -25,8 +25,6 @@ module.exports = {
 	assetsDir: 'static',
 	lintOnSave: process.env.NODE_ENV === 'development',
 	productionSourceMap: false,
-	//	productionGzip:true,
-	//	productionGzipExtensions:['js','css'],
 	devServer: {
 		port: port,
 		open: true,
@@ -43,18 +41,16 @@ module.exports = {
 				'@': resolve('src')
 			}
 		},
-		plugins: [
-			new CompressionPlugin({
-				test: /\.(js|css)?$/i, // 哪些文件要压缩
-				filename: '[path].gz[query]',
-				　 // 压缩后的文件名
-				algorithm: 'gzip',
-				　 // 使用gzip压缩
-				minRatio: 1,
-				　 // 压缩率小于1才会压缩
-				deleteOriginalAssets: true // 删除未压缩的文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false
-			})
-		]
+//		plugins: [
+//         new CompressionPlugin({
+//              algorithm: 'gzip', // 使用gzip压缩
+//              test: /\.js$|\.html$|\.css$/, // 匹配文件名
+//              filename: '[path].gz[query]', // 压缩后的文件名(保持原文件名，后缀加.gz)
+//              minRatio: 1, // 压缩率小于1才会压缩
+//              threshold: 10240, // 对超过10k的数据压缩
+//              deleteOriginalAssets: true, // 是否删除未压缩的源文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false（比如删除打包后的gz后还可以加载到原始资源文件）
+//          }),
+//		]
 	},
 	chainWebpack(config) {
 		//它可以提高第一屏的速度，建议打开预载
@@ -125,10 +121,11 @@ module.exports = {
 					config.optimization.runtimeChunk('single')
 				}
 			);
-		if(process.env.NODE_ENV == 'production') {
-			config
+						config
 				.plugin('webpack-bundle-analyzer')
 				.use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
+		if(process.env.NODE_ENV == 'production') {
+
 		}
 	}
 }

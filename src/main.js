@@ -44,7 +44,10 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
-
+import time from '@/directive/time'
+Vue.use(time);
+import message_jc from '@/lib/vill-message'
+Vue.use(message_jc);
 new Vue({
   el: '#app',
   router,
