@@ -1,5 +1,17 @@
 <template>
 	<div class="dashboard-editor-container">
+		<div class="board" style="width: 100%">
+			<button @click="addItem">Add an item dynamically</button>
+			<div class="home">
+				<grid-layout :layout="layout" :col-num="12" :row-height="layoutConfig.rowHeight" :is-draggable="layoutConfig.isDraggable" :is-resizable="layoutConfig.isDraggable" :is-mirrored="false" :vertical-compact="true" :margin="[10, 10]" :use-css-transforms="true" @layout-updated="layoutUpdatedEvent">
+					<grid-item v-for="(item,index) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i" @movedEvent='movedEvent'>
+
+						{{index}}
+						<span class="remove" @click="removeItem(item.i)">x</span>
+					</grid-item>
+				</grid-layout>
+			</div>
+		</div>
 		<div class="demo">
 			<h4>v-time 指令</h4>
 			<span v-time="now" format="Y/M月-D h:s"></span>
@@ -11,6 +23,7 @@
 		<ul>
 			<li @click="message">message</li>
 		</ul>
+
 		<panel-group @handleSetLineChartData="handleSetLineChartData" />
 
 		<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
@@ -59,7 +72,8 @@
 	import TransactionTable from './components/TransactionTable'
 	import TodoList from './components/TodoList'
 	import BoxCard from './components/BoxCard'
-
+	import layout from './layoutData.json'
+	import VueGridLayout from 'vue-grid-layout'
 	const lineChartData = {
 		newVisitis: {
 			expectedData: [100, 120, 161, 134, 105, 160, 165],
@@ -89,12 +103,30 @@
 			BarChart,
 			TransactionTable,
 			TodoList,
-			BoxCard
+			BoxCard,
+			GridLayout: VueGridLayout.GridLayout,
+			GridItem: VueGridLayout.GridItem
 		},
 		data() {
 			return {
 				lineChartData: lineChartData.newVisitis,
 				time: "2023-03-20 13:16:00",
+				layout: [],
+				layoutConfig: {
+					rowHeight: 100, // 默认高度
+					isDraggable: true, // 是否可拖拽
+					isResizable: true, // 是否可调整大小
+					autoSize: true, // 标识容器是否自动调整大小
+					preventCollision: false, // 防止碰撞属性，值设置为ture时，栅格只能拖动至空白处
+					responsive: false, // 布局是否为响应式
+					breakpoints: {
+						lg: 1200,
+						md: 996,
+						sm: 768,
+						xs: 480,
+						xxs: 0
+					}, //为响应式布局设置断点
+				}
 			}
 		},
 		computed: {
@@ -104,18 +136,56 @@
 		},
 
 		created() {
-
+			console.log(this.$Utils);
+			this.init()
 		},
+	 mounted() {
+        // this.$gridlayout.load();
+        this.index = this.layout.length;
+    },
 		methods: {
+			init() {
+				const aa = localStorage.getItem('jc-vue-grid-layout')
+				if(aa) {
+//					this.layout = layout.mainData
+					this.layout = JSON.parse(aa)
+				} else {
+
+					this.layout = layout.mainData
+				}
+			},
+			movedEvent(i, newX, newY) {
+
+			},
+			addItem: function() {
+				// Add a new item. It must have a unique key!
+				this.layout.push({
+					x: (this.layout.length * 2) % (this.colNum || 12),
+					y: this.layout.length + (this.colNum || 12), // puts it at the bottom
+					w: 2,
+					h: 2,
+					i: this.index,
+				});
+				// Increment the counter to ensure key is always unique.
+				this.index++;
+			},
+			removeItem: function(val) {
+				const index = this.layout.map(item => item.i).indexOf(val);
+				this.layout.splice(index, 1);
+			},
+			layoutUpdatedEvent(newLayout) {
+				console.log(newLayout);
+				localStorage.setItem('jc-vue-grid-layout', JSON.stringify(newLayout))
+			},
 			message() {
-//					console.log(this.$message)
-//									console.log(this.$message_jc)
+				//					console.log(this.$message)
+				//									console.log(this.$message_jc)
 				this.$message_jc({
 					duration: 2000,
 					type: 'success',
 					message: 'hello vill-message'
 				});
-//				this.$message_jc.success("hello vill-message");
+				//				this.$message_jc.success("hello vill-message");
 			},
 			handleSetLineChartData(type) {
 				this.lineChartData = lineChartData[type]
@@ -123,7 +193,6 @@
 		}
 	}
 </script>
-
 <style lang="scss" scoped>
 	.dashboard-editor-container {
 		padding: 32px;
@@ -136,6 +205,15 @@
 		}
 	}
 	
+	.vue-grid-item {
+		background: aquamarine;
+	}
+	.remove {
+    position: absolute;
+    right: 2px;
+    top: 0;
+    cursor: pointer;
+}
 	@media (max-width:1024px) {
 		.chart-wrapper {
 			padding: 8px;

@@ -115,7 +115,7 @@ export function getQueryObject(url) {
  * @returns {number} output value
  */
 export function byteLength(str) {
-  // returns the byte length of an utf8 string
+  // 返回utf8字符串的字节长度
   let s = str.length
   for (var i = str.length - 1; i >= 0; i--) {
     const code = str.charCodeAt(i)
@@ -187,7 +187,7 @@ export function html2Text(val) {
 }
 
 /**
- * Merges two objects, giving the last one precedence
+ * 合并两个对象，最后一个对象优先
  * @param {Object} target
  * @param {(Object|Array)} source
  * @returns {Object}
@@ -352,3 +352,4 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+export default {deepClone,hasClass,addClass,removeClass,getQueryObject}

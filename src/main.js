@@ -48,6 +48,10 @@ import time from '@/directive/time'
 Vue.use(time);
 import message_jc from '@/lib/vill-message'
 Vue.use(message_jc);
+// 工具函数引入
+import Utils from './utils'
+Object.defineProperty(Vue.prototype, '$Utils', {value: Utils})
+
 new Vue({
   el: '#app',
   router,
