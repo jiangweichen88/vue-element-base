@@ -28,7 +28,8 @@ import Layout from '@/layout'
 没有权限要求的基本页
 所有角色均可访问
  */
-export const constantRoutes = [{
+export const constantRoutes = [
+{
   path: '/redirect',
   component: Layout,
   hidden: true,

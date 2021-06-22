@@ -163,10 +163,10 @@ export default {
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
+        //现在默认是重定向到主页，如果没有标签视图，
+        //你可以根据需要进行调整。
         if (view.name === 'Dashboard') {
-          // to reload home page
+          //重载首页
           this.$router.replace({ path: '/redirect' + view.fullPath })
         } else {
           this.$router.push('/')

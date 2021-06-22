@@ -26,7 +26,8 @@ const constantRoutes = [
 	},
 ]
 
-const asyncRoutes = [{
+const asyncRoutes = [
+{
 		path: '/menu',
 		component: 'layout/index',
 		redirect: 'noRedirect',
@@ -48,7 +49,8 @@ const asyncRoutes = [{
 				icon: 'nested'
 			},
 		}]
-	}, {
+	}, 
+	{
 		path: '/permission',
 		component: 'layout/index',
 		redirect: 'noRedirect',
