@@ -1,9 +1,9 @@
 <template>
   <div ref="rightPanel" :class="{show:show}" class="rightPanel-container">
-    <div class="rightPanel-background" />
+    <div v-if="leftBgShow" class="rightPanel-background" />
     <div class="rightPanel">
-      <div class="handle-button" :style="{'top':buttonTop+'px','background-color':theme}" @click="show=!show">
-        <i :class="show?'el-icon-close':'el-icon-setting'" />
+      <div v-tooltip='tooptipPs' class="handle-button" :style="{'top':buttonTop+'px','background-color':theme}" @click="itemClick">
+        <i  :class="show?'el-icon-close':iconName" />
       </div>
       <div class="rightPanel-items">
         <slot />
@@ -14,7 +14,6 @@
 
 <script>
 import { addClass, removeClass } from '@/utils'
-
 export default {
   name: 'RightPanel',
   props: {
@@ -25,11 +24,39 @@ export default {
     buttonTop: {
       default: 250,
       type: Number
-    }
+    },
+    iconName:{
+    	default: 'el-icon-setting',
+      type: String
+    },
+    tooltipPosition:{
+    		default: 'right',
+    		type: String
+    },
+    tooltipName:{
+    	 	default: '',
+    		type: String
+    },
+    leftBgShow:{
+    	 	default: true,
+    		type: Boolean
+    },
+    width:{
+    	default: 260,
+      type: Number
+    },
   },
   data() {
     return {
-      show: false
+      show: false,
+      tooptipPs:{
+//    	title:'提示',
+      	content:this.tooltipName||'',
+      	placement:this.tooltipPosition||'left',
+      	placements:['left'],
+      	theme:'dark',
+      	disabled:false,
+      }
     }
   },
   computed: {
@@ -43,20 +70,26 @@ export default {
         this.addEventClick()
       }
       if (value) {
+      	this.tooptipPs.disabled=true;
         addClass(document.body, 'showRightPanel')
       } else {
+      	this.tooptipPs.disabled=false;
         removeClass(document.body, 'showRightPanel')
       }
     }
   },
   mounted() {
-    this.insertToBody()
+    this.insertToBody();
+    console.log(this.$props,this.tooltipPosition)
   },
   beforeDestroy() {
     const elx = this.$refs.rightPanel
     elx.remove()
   },
   methods: {
+  	itemClick(){
+  		this.show=!this.show
+  	},
     addEventClick() {
       window.addEventListener('click', this.closeSidebar)
     },
@@ -97,7 +130,7 @@ export default {
 
 .rightPanel {
   width: 100%;
-  max-width: 260px;
+  max-width: 300px;
   height: 100vh;
   position: fixed;
   top: 0;

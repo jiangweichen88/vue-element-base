@@ -352,4 +352,39 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
-export default {deepClone,hasClass,addClass,removeClass,getQueryObject}
+export function queryElement(node,selectScope) {
+	let d = !node ? document : node;
+	if(/\./.test(selectScope)) {
+		selectScope = selectScope.replace('.', '');
+		//HTMLcollection 伪数组
+		node = d.getElementsByClassName(selectScope);
+	} else if(/\#/.test(selectScope)) {
+		selectScope = selectScope.replace('#', '');
+		//HTML元素
+		node = d.getElementById(selectScope);
+	} else {
+		//HTMLcollection 伪数组
+		node = d.getElementsByTagName(selectScope);
+	}
+	return node;
+}
+export function closest(node, parent) {
+	if(parent) {
+	  parent = queryElement(parent);
+		while(node&&node.nodeType !== 9) {
+			node = node.parentNode;
+			// class tagName时判断伪数组中是否存在该node元素
+			// id时判断是否相等
+			if([].indexOf.call(parent, node) >= 0 || node === parent) {
+				return node;
+			}
+		}
+	}
+	return null;
+}
+export function parseDom(arg) { // 字符串转dom
+	const objE = document.createElement('div')
+	objE.innerHTML = arg
+	return objE.childNodes
+}
+export default {deepClone,hasClass,addClass,removeClass,getQueryObject, queryElement,closest,parseDom}

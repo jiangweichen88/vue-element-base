@@ -13,6 +13,9 @@ export default {
         this.chart.resize()
       }
     }, 100)
+    setTimeout(()=>{
+    	 this.chart.resize()
+    },0)
     this.$_initResizeEvent()
     this.$_initSidebarResizeEvent()
   },

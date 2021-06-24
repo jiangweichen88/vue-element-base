@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      this.$emit('emit', type)
     }
   }
 }

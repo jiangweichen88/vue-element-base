@@ -4,15 +4,26 @@
 .dis-b {
     display: block;
 }
-.vis-h{
-    
-    visibility: hidden;
-}
 .flex1 {
     flex: 1;
 }
 .flex-d-c{
    flex-direction: column; 
+}
+.a-center{
+    align-items: center;
+}
+.a-baseline{
+    align-items: baseline;
+}
+.j-center{
+    justify-content: center;
+}
+.j-left{
+    justify-content: flex-start;
+}
+.j-right{
+    justify-content: flex-end;
 }
 .pointer {
     cursor: pointer;
@@ -20,14 +31,11 @@
 .bg-w {
     background: #fff;
 }
-.bg-c {
-    background: #eef1f6;
-}
 .w100 {
     width: 100%;
 }
-.w0{
-    width: 0;
+.h0{
+    height: 0;
 }
 .fl {
     float: left;
@@ -68,6 +76,7 @@
 .marr10 {
     margin-right: 10px;
 }
+
 .marb10 {
     margin-bottom: 10px;
 }
@@ -75,29 +84,17 @@
 .mart10 {
     margin-top: 10px;
 }
-.marl16 {
-    margin-left: 16px;
-}
 
-.marr16 {
-    margin-right: 16px;
-}
-
-.marb16 {
-    margin-bottom: 16px;
-}
-.mart16 {
-    margin-top: 16px;
-}
 .mart0 {
     margin-top: 0px;
+}
+.marb20{
+    margin-bottom: 20px;
 }
 .pad10 {
     padding: 10px;
 }
-.pad16 {
-    padding: 16px;
-}
+
 .pad0 {
     padding: 0px;
 }
@@ -113,21 +110,15 @@
 .padl10 {
     padding-left: 10px;
 }
-.padl16 {
-    padding-left: 16px;
-}
+
 .padr10 {
     padding-right: 10px;
 }
-.padr16 {
-    padding-right: 16px;
-}
+
 .padb10 {
     padding-bottom: 10px;
 }
-.padb16 {
-    padding-bottom: 16px;
-}
+
 .padb0 {
     padding-bottom: 0px;
 }
@@ -135,9 +126,7 @@
 .padt10 {
     padding-top: 10px;
 }
-.padt16 {
-    padding-top: 16px;
-}
+
 .padt0 {
     padding-top: 0px;
 }
@@ -191,9 +180,7 @@
 .h100 {
     height: 100%;
 }
-.h0 {
-    height: 0;
-}
+
 .bor4 {
     border: 1px solid #EBEEF5;
 }
@@ -227,3 +214,32 @@
 }
 ul,li{ padding:0;margin:0;list-style:none}
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td,strong{padding:0;margin:0;font-family:Arial,'Microsoft Yahei';}
+.card0-jc{
+    margin-bottom: 20px;
+        border-radius: 6px;
+    background: #ffff;
+    .el-card__header{
+            line-height: 38px;
+             padding: 6px 20px;
+             font-weight: 600;
+                 font-size: 16px;
+    }
+}
+.card0-jc-b0{
+   .el-card__body{
+           padding-bottom: 0;
+   }
+}
+.kanbanHeader-blod {
+    font-weight: 600;
+    margin-top: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    line-height: 42px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 16px;
+}
+.jc-content{
+    background-color: rgb(240, 242, 245);
+    padding: 20px;
+}

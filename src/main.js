@@ -48,6 +48,9 @@ import time from '@/directive/time'
 Vue.use(time);
 import message_jc from '@/lib/vill-message'
 Vue.use(message_jc);
+import tooltip from '@/directive/tooltip'
+Vue.use(tooltip);
+import '@/directive/tooltip/index.scss'
 // 工具函数引入
 import Utils from './utils'
 Object.defineProperty(Vue.prototype, '$Utils', {value: Utils})

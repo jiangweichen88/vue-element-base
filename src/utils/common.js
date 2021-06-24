@@ -1,3 +1,4 @@
+
 export function getViews(path) { // 字符串转import
 	return resolve => {
 		require.ensure([], (require) => {
@@ -6,19 +7,19 @@ export function getViews(path) { // 字符串转import
 	}
 }
 
-export function queryElement(node, selectScope) {
-	let d = !selectScope ? document : selectScope;
-	if(/\./.test(node)) {
-		node = node.replace('.', '');
+export function queryElement(node,selectScope) {
+	let d = !node ? document : node;
+	if(/\./.test(selectScope)) {
+		selectScope = selectScope.replace('.', '');
 		//HTMLcollection 伪数组
-		node = d.getElementsByClassName(node);
-	} else if(/\#/.test(node)) {
-		node = node.replace('#', '');
+		node = d.getElementsByClassName(selectScope);
+	} else if(/\#/.test(selectScope)) {
+		selectScope = selectScope.replace('#', '');
 		//HTML元素
-		node = d.getElementById(node);
+		node = d.getElementById(selectScope);
 	} else {
 		//HTMLcollection 伪数组
-		node = d.getElementsByTagName(node);
+		node = d.getElementsByTagName(selectScope);
 	}
 	return node;
 }
@@ -46,7 +47,11 @@ export function addClass(obj, cls){
   added = obj_class + blank + cls;//组合原来的 class 和需要添加的 class.
   obj.className = added;//替换原来的 class.
 }
-
+export function parseDom(arg) { // 字符串转dom
+	const objE = document.createElement('div')
+	objE.innerHTML = arg
+	return objE.childNodes
+}
 /* 数组 start---------------*/
 //树结构筛选
 export function treeFilter (tree, func) {
@@ -197,11 +202,7 @@ export function keyToValue(obj) { // key和value交换
 	}
 	return result
 }
-export function parseDom(arg) { // 字符串转dom
-	const objE = document.createElement('div')
-	objE.innerHTML = arg
-	return objE.childNodes
-}
+
 export function omit(object, props = []) { // 对象属性剔除
 	const res = {}
 	Object.keys(object).forEach(key => {
@@ -2025,4 +2026,7 @@ const countryArr = [ // 国家数组
 ]
 export {
 	countryArr
+}
+export default{
+	  queryElement,closest,addClass,parseDom
 }

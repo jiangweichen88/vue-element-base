@@ -1,5 +1,5 @@
 <template>
-	<el-container class="h100 bg-c pad16 menu-jc ">
+	<el-container class="h100 bg-c pad16 menu-jc jc-content">
 		<el-header class="pad0">
 			<el-button type="primary" @click="save">
 				保存

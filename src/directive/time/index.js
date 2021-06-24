@@ -3,8 +3,8 @@ export default {
 	install(Vue, options = {}) {
 		Vue.directive("time", { //v-time获取一个传入的时间戳值binding.value，然后返回一个符合格式的time值
 			bind(el, binding) {
-				console.log(el, binding)
-				console.log(el.attributes, el.attributes.format.value, el.getAttribute('format'))
+//				console.log(el, binding)
+//				console.log(el.attributes, el.attributes.format.value, el.getAttribute('format'))
 				const format = el.attributes.format.value;
 				el.innerHTML = el.innerHTML ? el.innerHTML : el.textContent;
 				el.innerHTML = Time.formatDate(binding.value, format);

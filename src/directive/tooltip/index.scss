@@ -1,0 +1,143 @@
+.v-tip-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	box-sizing: border-box;
+	width: 200px;
+	padding: 6px 8px;
+	margin: 0;
+	color: #000;
+	font-size: 12px;
+	background: #fff;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, .1);
+	border: 1px solid #d9d9d9;
+	border-radius: 4px;
+	transform: translate3d(0, 0, 0);
+	transition: opacity .3s;
+	will-change: opacity, transform
+}
+
+.v-tip-container .v-tip-arrows,
+.v-tip-container .v-tip-arrows::after {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: inherit
+}
+
+.v-tip-container .v-tip-content,
+.v-tip-container .v-tip-title {
+	padding: 0;
+	margin: 0
+}
+
+.v-tip-container .v-tip-title {
+	font-size: 14px;
+	font-weight: 400
+}
+
+.v-tip-container .v-tip-content {
+	overflow-y: auto;
+	line-height: 2;
+	text-align: left;
+	word-wrap: break-word;
+	background-color: inherit
+}
+
+.v-tip-container .v-tip-arrows {
+	z-index: -1;
+	padding: 0;
+	margin: 0;
+	border-width: 10px
+}
+
+.v-tip-container .v-tip-arrows::after {
+	content: '';
+	border-width: inherit;
+	transform: translate(-50%, -50%)
+}
+
+.v-tip-container .v-tip-arrows[class*=' top-'],
+.v-tip-container .v-tip-arrows[class^=top-] {
+	border-top-color: inherit;
+	transform: translate(-50%, 0)
+}
+
+.v-tip-container .v-tip-arrows[class*=' top-']::after,
+.v-tip-container .v-tip-arrows[class^=top-]::after {
+	top: -2px;
+	border-top-color: #fff
+}
+
+.v-tip-container .v-tip-arrows[class*=' bottom-'],
+.v-tip-container .v-tip-arrows[class^=bottom-] {
+	border-bottom-color: inherit;
+	transform: translate(-50%, -100%)
+}
+
+.v-tip-container .v-tip-arrows[class*=' bottom-']::after,
+.v-tip-container .v-tip-arrows[class^=bottom-]::after {
+	top: 2px;
+	border-bottom-color: #fff
+}
+
+.v-tip-container .v-tip-arrows[class*=' left-'],
+.v-tip-container .v-tip-arrows[class^=left-] {
+	border-left-color: inherit;
+	transform: translate(0, -50%)
+}
+
+.v-tip-container .v-tip-arrows[class*=' left-']::after,
+.v-tip-container .v-tip-arrows[class^=left-]::after {
+	left: -2px;
+	border-left-color: #fff
+}
+
+.v-tip-container .v-tip-arrows[class*=' right-'],
+.v-tip-container .v-tip-arrows[class^=right-] {
+	border-right-color: inherit;
+	transform: translate(-100%, -50%)
+}
+
+.v-tip-container .v-tip-arrows[class*=' right-']::after,
+.v-tip-container .v-tip-arrows[class^=right-]::after {
+	left: 2px;
+	border-right-color: #fff
+}
+
+.v-tip-container.dark {
+	color: #fff;
+	background: #1f2d3d;
+	border-color: #1f2d3d
+}
+
+.v-tip-container.dark [class*=' top-']::after,
+.v-tip-container.dark [class^=top-]::after {
+	border-top-color: #1f2d3d
+}
+
+.v-tip-container.dark [class*=' bottom-']::after,
+.v-tip-container.dark [class^=bottom-]::after {
+	border-bottom-color: #1f2d3d
+}
+
+.v-tip-container.dark [class*=' left-']::after,
+.v-tip-container.dark [class^=left-]::after {
+	border-left-color: #1f2d3d
+}
+
+.v-tip-container.dark [class*=' right-']::after,
+.v-tip-container.dark [class^=right-]::after {
+	border-right-color: #1f2d3d
+}
+
+.v-tip-container.transition-transfrom {
+	transition: opacity .3s, transform .5s cubic-bezier(.4, 0, .2, 1)
+}
+
+.v-tip-container.v-tip-fade-enter,
+.v-tip-container.v-tip-fade-leave-active {
+	opacity: 0
+}
