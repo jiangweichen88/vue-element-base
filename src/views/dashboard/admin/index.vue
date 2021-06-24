@@ -6,12 +6,12 @@
 		</div>
 		<div class="board" style="width: 100%">
 			<div class="home">
-				<grid-layout :layout="layout" :col-num="12"  :row-height="layoutConfig.rowHeight" :is-draggable="layoutConfig.isDraggable" :is-resizable="layoutConfig.isDraggable" :is-mirrored="false" :vertical-compact="true" :margin="[10, 10]" :use-css-transforms="true" @layout-updated="layoutUpdatedEvent">
+				<grid-layout :layout="layout" :col-num="12" :row-height="layoutConfig.rowHeight" :is-draggable="layoutConfig.isDraggable" :is-resizable="layoutConfig.isDraggable" :is-mirrored="false" :vertical-compact="true" :margin="[10, 10]" :use-css-transforms="true" @layout-updated="layoutUpdatedEvent">
 					<grid-item v-for="(item,index) in layout" :min-w="4" :minW="4" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i" @movedEvent='movedEvent'>
 						<el-card class="box-card">
 							<div slot="header" class="clearfix dis-f a-center">
 								<span class="flex1">{{item.name+index}}</span>
-								<i  @click="removeItem(item.i)" class="el-icon-close pointer" />
+								<i @click="removeItem(item.i)" class="el-icon-close pointer" />
 							</div>
 							<component :is="item.cName" :chart-data="lineChartData" @emit='fns($event,item)'></component>
 							<!--item.fn?fns[item.fn]:fn-->
@@ -68,8 +68,8 @@
 					"h": 3, //标识栅格元素的初始高度，值为rowHeight的倍数
 					"i": "0", //栅格中元素的ID。
 					"cName": "PanelGroup",
-					fn:'fn0',
-					name:'组件PanelGroup',
+					fn: 'fn0',
+					name: '组件PanelGroup',
 				}],
 				layoutConfig: {
 					rowHeight: 100, // 默认高度
@@ -94,84 +94,88 @@
 				return Date.now();
 			},
 			configsOpt() {
-				return{
+				return {
 					show: true,
-					layout:this.layout,
-					title:'组件工厂',
+					layout: this.layout,
+					title: '组件工厂',
 				}
 			},
 		},
 
 		created() {
-//			console.log(this.$Utils);
+			//			console.log(this.$Utils);
 			this.init()
 		},
 		mounted() {
 			// this.$gridlayout.load();
-			this.index = this.layout.length;
+//			this.index = this.layout.length;
 		},
 		methods: {
-			fns($event,item){
-				if(item.fn){
-					this[item.fn]($event,item)
-				}else{
-					this.fn($event,item)
+			fns($event, item) {
+				if(item.fn) {
+					this[item.fn]($event, item)
+				} else {
+					this.fn($event, item)
 				}
 			},
-			fn($event,item){
-				console.log('00',$event,item);
-				
+			fn($event, item) {
+				console.log('00', $event, item);
+
 			},
-			fn0($event,item){
-				console.log('0',$event,item)
+			fn0($event, item) {
+				console.log('0', $event, item)
 				this.handleSetLineChartData($event)
 			},
-			fn1($event,item){
-				console.log('1',$event,item)
+			fn1($event, item) {
+				console.log('1', $event, item)
 			},
 			addConfig({
 				name,
 				cName
 			}) {
 				this.addItem({
-				name,
-				cName
-			});
+					name,
+					cName
+				});
 			},
 			init() {
-//				return
+				//				return
 				const aa = localStorage.getItem('jc-vue-grid-layout')
 				if(aa) {
 					this.layout = JSON.parse(aa)
-				} 
+				}
 			},
 			movedEvent(i, newX, newY) {
 
 			},
-			addItem({name,cName}) {
-				// Add a new item. It must have a unique key!
-				this.index++;
+			addItem({
+				name,
+				cName
+			}) {
+				//递增计数器以确保键总是唯一的。
+//				this.index++;
 				this.layout.push({
 					x: 0,
 					y: 0, // puts it at the bottom
 					w: 4,
 					h: 3,
-					i: this.index,
+					i: Date.now(),
 					"cName": cName,
-					name:'组件'+name,
+					name: '组件' + name,
 				});
-				// Increment the counter to ensure key is always unique.
-				
+
 			},
 			removeItem: function(val) {
-				const index = this.layout.map(item => item.i).indexOf(val);
+				//				const index = this.layout.map(item => item.i).indexOf(val);
+//				this.index--;
+				const index = this.layout.findIndex(item => item.i == val);
 				this.layout.splice(index, 1);
 			},
-			empty(){
-				this.layout=[];
+			empty() {
+				this.layout = [];
 			},
 			layoutUpdatedEvent(newLayout) {
-//				console.log(newLayout);
+								console.log(newLayout);
 				localStorage.setItem('jc-vue-grid-layout', JSON.stringify(newLayout))
 			},
 			message() {
