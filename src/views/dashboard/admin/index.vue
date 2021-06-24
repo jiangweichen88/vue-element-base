@@ -150,6 +150,7 @@
 			},
 			addItem({name,cName}) {
 				// Add a new item. It must have a unique key!
+				this.index++;
 				this.layout.push({
 					x: 0,
 					y: 0, // puts it at the bottom
@@ -160,7 +161,7 @@
 					name:'组件'+name,
 				});
 				// Increment the counter to ensure key is always unique.
-				this.index++;
+				
 			},
 			removeItem: function(val) {
 				const index = this.layout.map(item => item.i).indexOf(val);
