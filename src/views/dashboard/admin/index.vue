@@ -6,8 +6,8 @@
 		</div>
 		<div class="board" style="width: 100%">
 			<div class="home">
-				<grid-layout :layout="layout" :col-num="12" :minW='6' :row-height="layoutConfig.rowHeight" :is-draggable="layoutConfig.isDraggable" :is-resizable="layoutConfig.isDraggable" :is-mirrored="false" :vertical-compact="true" :margin="[10, 10]" :use-css-transforms="true" @layout-updated="layoutUpdatedEvent">
-					<grid-item v-for="(item,index) in layout" :min-w="6" :minW="6" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i" @movedEvent='movedEvent'>
+				<grid-layout :layout="layout" :col-num="12"  :row-height="layoutConfig.rowHeight" :is-draggable="layoutConfig.isDraggable" :is-resizable="layoutConfig.isDraggable" :is-mirrored="false" :vertical-compact="true" :margin="[10, 10]" :use-css-transforms="true" @layout-updated="layoutUpdatedEvent">
+					<grid-item v-for="(item,index) in layout" :min-w="4" :minW="4" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i" @movedEvent='movedEvent'>
 						<el-card class="box-card">
 							<div slot="header" class="clearfix dis-f a-center">
 								<span class="flex1">{{item.name+index}}</span>
